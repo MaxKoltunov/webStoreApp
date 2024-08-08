@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Max
+      changes:
+        - sqlFile:
+            path: changeLogs/discountSchema/createSchema.sql
+  - changeSet:
+      id: 2
+      author: Max
+      changes:
+        - sqlFile:
+            path: changeLogs/discountSchema/createSeq.sql
+  - changeSet:
+      id: 3
+      author: Max
+      changes:
+        - sqlFile:
+            path: changeLogs/discountSchema/createTable.sql

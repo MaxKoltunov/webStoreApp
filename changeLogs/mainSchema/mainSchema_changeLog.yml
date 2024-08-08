@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: Max
+      changes:
+        - sqlFile:
+            path: changeLogs/mainSchema/createSchemaAndSeq.sql
+  - changeSet:
+      id: 4
+      author: Max
+      changes:
+        - sqlFile:
+            path: changeLogs/mainSchema/mainSchema.sql
