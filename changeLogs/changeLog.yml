@@ -2,9 +2,6 @@ name: Short description of change
 tag: PATCH
 databaseChangeLog:
   - include:
-      file: changeLogs/discountSchema/discountSchema_changeLog.yml
-
-  - include:
       file: changeLogs/mainSchema/mainSchema_changeLog.yml
 
   - include:
