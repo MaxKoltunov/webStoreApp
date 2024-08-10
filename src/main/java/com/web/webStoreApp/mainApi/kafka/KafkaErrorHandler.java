@@ -1,4 +1,4 @@
-package com.web.webStoreApp.mainApi.discountsKafka.errorHandlers;
+package com.web.webStoreApp.mainApi.kafka;
 
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -11,7 +11,7 @@ import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DiscountKafkaErrorHandler implements CommonErrorHandler, ConsumerAwareListenerErrorHandler {
+public class KafkaErrorHandler implements CommonErrorHandler, ConsumerAwareListenerErrorHandler {
 
     public Object handleError(Message<?> message, ListenerExecutionFailedException exception, Consumer<?, ?> consumer) {
         System.err.println("An error occured: " + exception.getMessage());

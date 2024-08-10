@@ -1,4 +1,4 @@
-package com.web.webStoreApp.mainApi.discountsKafka.consumers;
+package com.web.webStoreApp.mainApi.kafka.discountsKafka.consumers;
 
 
 
@@ -18,7 +18,7 @@ public class DiscountKafkaConsumer {
     private ExistingDiscountController existingDiscountController;
 
 
-    @KafkaListener(topics = "discount-topic", groupId = "webApp")
+    @KafkaListener(topics = "discount-topic", groupId = "discounts", containerFactory = "kafkaListenerContainerFactoryForDiscounts")
     public void listen(MessageObject messageObject) {
         System.out.println("Listener has received a message!");
         processMessage(messageObject);

@@ -36,14 +36,34 @@ public class ProductService {
             product.setCost(dto.getCost());
             product.setBrand(dto.getBrand());
             product.setArrivalDate(dto.getArrival_date());
-            product.setAmount(1L);
-
+            if (dto.getAmount() == null) {
+                product.setAmount(1L);
+            } else {
+                product.setAmount(dto.getAmount());
+            }
             if (dto.getDiscountId() != null) {
                 ExistingDiscount discount = exsistingDiscountRepository.findById(dto.getDiscountId()).orElse(null);
                 product.setDiscount(discount);
             }
 
             productRepository.save(product);
+        }
+    }
+
+    public String changeAmount(ProductDTO dto) {
+        Optional<Product> productOpt = productRepository.findByNameTypeBrand(dto.getName(), dto.getType(), dto.getBrand());
+
+        if (productOpt.isPresent()) {
+            Product product = productOpt.get();
+            product.setAmount(product.getAmount() + dto.getAmount());
+            if (product.getAmount() <= 0) {
+                productRepository.deleteProduct(dto.getName(), dto.getType(), dto.getBrand());
+                return "Product has been deleted due to decreasing";
+            }
+            productRepository.save(product);
+            return "Amount has been changed";
+        } else {
+            return "There is no such product";
         }
     }
 

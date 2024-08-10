@@ -1,7 +1,7 @@
-package com.web.webStoreApp.mainApi.discountsKafka.deserializers;
+package com.web.webStoreApp.mainApi.kafka.discountsKafka.deserializers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.web.webStoreApp.mainApi.discountsKafka.consumers.DiscountKafkaConsumer;
+import com.web.webStoreApp.mainApi.kafka.discountsKafka.consumers.DiscountKafkaConsumer;
 import org.apache.kafka.common.serialization.Deserializer;
 
 import java.util.Map;
