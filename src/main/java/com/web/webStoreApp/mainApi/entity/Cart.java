@@ -8,7 +8,6 @@ import jakarta.persistence.*;
 @IdClass(CartId.class)
 public class Cart {
 
-
     @Id
     @Column(name = "user_id", nullable = false)
     private Long userId;
@@ -16,14 +15,6 @@ public class Cart {
     @Id
     @Column(name = "product_id", nullable = false)
     private Long productId;
-
-//    @ManyToOne
-//    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-//    private User user;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
-//    private Product product;
 
     @Column(name = "amount", nullable = false)
     private Long amount;

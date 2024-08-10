@@ -1,11 +1,13 @@
 package com.web.webStoreApp.mainApi.dto;
 
 
+import java.sql.Date;
+
 public class UserDTO {
 
     private String name;
 
-    private String birthDay;
+    private Date birthDay;
 
     private String phone_number;
 
@@ -38,11 +40,11 @@ public class UserDTO {
         this.name = name;
     }
 
-    public String getBirthDay() {
+    public Date getBirthDay() {
         return birthDay;
     }
 
-    public void setBirthDay(String birthDay) {
+    public void setBirthDay(Date birthDay) {
         this.birthDay = birthDay;
     }
 

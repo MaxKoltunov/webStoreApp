@@ -2,6 +2,7 @@ package com.web.webStoreApp.mainApi.entity;
 
 import jakarta.persistence.*;
 
+import java.sql.Timestamp;
 
 
 @Entity
@@ -26,7 +27,7 @@ public class Product {
     private Long cost;
 
     @Column(name = "arrival_date", nullable = false)
-    private String arrivalDate;
+    private Timestamp arrivalDate;
 
     @Column(name = "amount", nullable = false)
     private Long amount;
@@ -84,11 +85,11 @@ public class Product {
         this.cost = cost;
     }
 
-    public String getArrivalDate() {
+    public Timestamp getArrivalDate() {
         return arrivalDate;
     }
 
-    public void setArrivalDate(String arrivalDate) {
+    public void setArrivalDate(Timestamp arrivalDate) {
         this.arrivalDate = arrivalDate;
     }
 

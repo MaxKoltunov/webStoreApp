@@ -3,6 +3,8 @@ package com.web.webStoreApp.mainApi.entity;
 
 import jakarta.persistence.*;
 
+import java.sql.Date;
+
 @Entity
 @Table(name = "users", schema = "mainschema")
 public class User {
@@ -16,7 +18,7 @@ public class User {
     private String name;
 
     @Column(name = "birth_day", nullable = false)
-    private String birthDay;
+    private Date birthDay;
 
     @Column(name = "phone_number", nullable = false, unique = true)
     private String phone_number;
@@ -53,11 +55,11 @@ public class User {
         this.name = name;
     }
 
-    public String getBirthDay() {
+    public Date getBirthDay() {
         return birthDay;
     }
 
-    public void setBirthDay(String birthDay) {
+    public void setBirthDay(Date birthDay) {
         this.birthDay = birthDay;
     }
 

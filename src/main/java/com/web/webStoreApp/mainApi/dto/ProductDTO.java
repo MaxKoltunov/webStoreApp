@@ -12,7 +12,7 @@ public class ProductDTO {
 
     private String brand;
 
-    private String arrival_date;
+    private Timestamp arrival_date;
 
     private Long discountId;
 
@@ -59,11 +59,11 @@ public class ProductDTO {
         this.cost = cost;
     }
 
-    public String getArrival_date() {
+    public Timestamp getArrival_date() {
         return arrival_date;
     }
 
-    public void setArrival_date(String arrival_date) {
+    public void setArrival_date(Timestamp arrival_date) {
         this.arrival_date = arrival_date;
     }
 

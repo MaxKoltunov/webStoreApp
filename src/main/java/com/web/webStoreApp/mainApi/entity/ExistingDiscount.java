@@ -3,8 +3,7 @@ package com.web.webStoreApp.mainApi.entity;
 
 import jakarta.persistence.*;
 
-import java.sql.Timestamp;
-import java.util.Date;
+import java.sql.Date;
 import java.util.Set;
 
 @Entity
@@ -22,16 +21,26 @@ public class ExistingDiscount {
     @Column(name = "type", nullable = false)
     private String type;
 
+    @Column(name = "product_type", nullable = false)
+    private String productType;
+
     @Column(name = "start_date", nullable = false)
-    private Timestamp startDate;
+    private Date startDate;
 
     @Column(name = "end_date", nullable = false)
-    private Timestamp endDate;
+    private Date endDate;
 
     @OneToMany(mappedBy = "existingDiscount")
     private Set<Product> products;
 
 
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
+    }
 
     public Long getId() {
         return id;
@@ -61,7 +70,7 @@ public class ExistingDiscount {
         return startDate;
     }
 
-    public void setStartDate(Timestamp startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
@@ -69,7 +78,7 @@ public class ExistingDiscount {
         return endDate;
     }
 
-    public void setEndDate(Timestamp endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 

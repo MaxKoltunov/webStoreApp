@@ -15,15 +15,15 @@ public class ExistingDiscountController {
 
     @PostMapping("/add")
     public String addExistingDiscount(@RequestBody ExistingDiscountDTO dto) {
-        existingDiscountService.addExistingDiscount(dto.getName(), dto.getType(), dto.getStartDate(), dto.getEndDate());
+        existingDiscountService.addExistingDiscount(dto.getName(), dto.getType(), dto.getProductType(), dto.getStartDate(), dto.getEndDate());
         return "A new discount has been added";
     }
-    // curl -X POST "http://localhost:8080/api/main/discounts/add" -H "Content-Type: application/json" -d "{\"name\": \"test_discount\", \"type\": \"test_type\", \"startDate\": \"2024-08-01T06:00:00+05:00\", \"endDate\": \"2024-08-14T23:00:00+05:00\"}"
+    // curl -X POST "http://localhost:8080/api/main/discounts/add" -H "Content-Type: application/json" -d "{\"name\": \"test_discount\", \"type\": \"test_type\", \"productType\": \"test_product_type\", \"startDate\": \"2024-08-01\", \"endDate\": \"2024-08-14\"}"
 
     @DeleteMapping("/delete")
     public String deleteExistingDiscount(@RequestBody ExistingDiscountDTO dto) {
-        existingDiscountService.deleteExistingDiscount(dto.getName(), dto.getType());
+        existingDiscountService.deleteExistingDiscount(dto.getName(), dto.getType(), dto.getProductType());
         return "Discount has been deleted";
     }
-    // curl -X DELETE "http://localhost:8080/api/main/discounts/delete" -H "Content-Type: application/json" -d "{\"name\":\"test_discount\", \"type\":\"test_type\"}"
+    // curl -X DELETE "http://localhost:8080/api/main/discounts/delete" -H "Content-Type: application/json" -d "{\"name\":\"test_discount\", \"type\":\"test_type\", \"productType\": \"test_product_type\"}"
 }

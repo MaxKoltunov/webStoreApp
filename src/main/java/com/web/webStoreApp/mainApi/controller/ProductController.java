@@ -19,7 +19,7 @@ public class ProductController {
         return "Product has been added or updated";
     }
 
-    // curl -X POST "http://localhost:8080/api/main/products/add" -H "Content-Type: application/json" -d "{\"name\": \"test_product\", \"type\": \"test_type\", \"brand\":\"test_brand\", \"cost\": 100, \"arrival_date\": \"2024-08-01 06:00:00\", \"discount_id\": null}"
+    // curl -X POST "http://localhost:8080/api/main/products/add" -H "Content-Type: application/json" -d "{\"name\": \"test_product\", \"type\": \"test_type\", \"brand\":\"test_brand\", \"cost\": 100, \"arrival_date\": \"2024-08-01T06:00:00+05:00\", \"discount_id\": null}"
 
     @DeleteMapping("/delete")
     public String deleteProduct(@RequestBody ProductDTO dto) {

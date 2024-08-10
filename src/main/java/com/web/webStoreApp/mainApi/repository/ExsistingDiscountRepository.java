@@ -13,6 +13,6 @@ public interface ExsistingDiscountRepository extends JpaRepository<ExistingDisco
 
     @Modifying
     @Transactional
-    @Query(value = "DELETE FROM mainschema.discounts WHERE name = :name AND type = :type", nativeQuery = true)
-    void deleteExistingDiscount(String name, String type);
+    @Query(value = "DELETE FROM mainschema.discounts WHERE name = :name AND type = :type AND product_type = :product_type", nativeQuery = true)
+    void deleteExistingDiscount(String name, String type, String product_type);
 }
