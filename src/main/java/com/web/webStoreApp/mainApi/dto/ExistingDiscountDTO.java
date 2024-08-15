@@ -1,7 +1,7 @@
 package com.web.webStoreApp.mainApi.dto;
 
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 public class ExistingDiscountDTO {
 
@@ -13,9 +13,9 @@ public class ExistingDiscountDTO {
 
     private String productType;
 
-    private Date startDate;
+    private Timestamp startDate;
 
-    private Date endDate;
+    private Timestamp endDate;
 
 
     public String getProductType() {
@@ -50,19 +50,19 @@ public class ExistingDiscountDTO {
         this.type = type;
     }
 
-    public Date getStartDate() {
+    public Timestamp getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(Timestamp startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public Timestamp getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(Timestamp endDate) {
         this.endDate = endDate;
     }
 }

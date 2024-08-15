@@ -3,12 +3,14 @@ package com.web.webStoreApp.mainApi.kafka.discountsKafka.consumers;
 
 
 import com.web.webStoreApp.mainApi.controller.ExistingDiscountController;
+import com.web.webStoreApp.mainApi.controller.ProductController;
 import com.web.webStoreApp.mainApi.dto.ExistingDiscountDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import java.sql.Date;
+
+import java.sql.Timestamp;
 
 
 @Component
@@ -16,6 +18,9 @@ public class DiscountKafkaConsumer {
 
     @Autowired
     private ExistingDiscountController existingDiscountController;
+
+    @Autowired
+    private ProductController productController;
 
 
     @KafkaListener(topics = "discount-topic", groupId = "discounts", containerFactory = "kafkaListenerContainerFactoryForDiscounts")
@@ -33,6 +38,7 @@ public class DiscountKafkaConsumer {
         dto.setEndDate(messageObject.getEndDate());
         existingDiscountController.addExistingDiscount(dto);
         System.out.println("The message was sent to the controller");
+        productController.mapDiscountToProducts(dto);
     }
 
     public static class MessageObject {
@@ -43,9 +49,9 @@ public class DiscountKafkaConsumer {
 
         private String productType;
 
-        private Date startDate;
+        private Timestamp startDate;
 
-        private Date endDate;
+        private Timestamp endDate;
 
 
         public String getName() {
@@ -72,19 +78,19 @@ public class DiscountKafkaConsumer {
             this.productType = productType;
         }
 
-        public Date getStartDate() {
+        public Timestamp getStartDate() {
             return startDate;
         }
 
-        public void setStartDate(Date startDate) {
+        public void setStartDate(Timestamp startDate) {
             this.startDate = startDate;
         }
 
-        public Date getEndDate() {
+        public Timestamp getEndDate() {
             return endDate;
         }
 
-        public void setEndDate(Date endDate) {
+        public void setEndDate(Timestamp endDate) {
             this.endDate = endDate;
         }
     }

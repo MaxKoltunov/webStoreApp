@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -24,4 +25,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(value = "SELECT * FROM mainschema.products WHERE id = :id", nativeQuery = true)
     Optional<Product> findById(Long id);
 
+    @Query(value = "SELECT id FROM mainschema.products", nativeQuery = true)
+    List<Long> getAllIds();
+
+    @Query(value = "SELECT * FROM mainschema.products WHERE type = :product_type", nativeQuery = true)
+    List<Product>findByType(String product_type);
 }

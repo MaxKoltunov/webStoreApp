@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
+import java.sql.Timestamp;
+
 
 @Service
 public class ExistingDiscountService {
@@ -19,7 +20,8 @@ public class ExistingDiscountService {
         this.exsistingDiscountRepository = exsistingDiscountRepository;
     }
 
-    public ExistingDiscount addExistingDiscount(String name, String type, String product_type, Date start_date, Date end_date) {
+
+    public ExistingDiscount addExistingDiscount(String name, String type, String product_type, Timestamp start_date, Timestamp end_date) {
         ExistingDiscount existingDiscount = new ExistingDiscount();
         existingDiscount.setName(name);
         existingDiscount.setType(type);
@@ -33,4 +35,5 @@ public class ExistingDiscountService {
     public void deleteExistingDiscount(String name, String type, String product_type) {
         exsistingDiscountRepository.deleteExistingDiscount(name, type, product_type);
     }
+
 }
