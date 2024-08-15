@@ -1,6 +1,7 @@
 package com.web.webStoreApp.mainApi.service;
 
 
+import com.web.webStoreApp.mainApi.dto.ExistingDiscountDTO;
 import com.web.webStoreApp.mainApi.entity.ExistingDiscount;
 import com.web.webStoreApp.mainApi.repository.ExsistingDiscountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,13 @@ public class ExistingDiscountService {
     }
 
 
-    public ExistingDiscount addExistingDiscount(String name, String type, String product_type, Timestamp start_date, Timestamp end_date) {
+    public ExistingDiscount addExistingDiscount(ExistingDiscountDTO dto) {
         ExistingDiscount existingDiscount = new ExistingDiscount();
-        existingDiscount.setName(name);
-        existingDiscount.setType(type);
-        existingDiscount.setProductType(product_type);
-        existingDiscount.setStartDate(start_date);
-        existingDiscount.setEndDate(end_date);
+        existingDiscount.setName(dto.getName());
+        existingDiscount.setType(dto.getType());
+        existingDiscount.setProductType(dto.getProductType());
+        existingDiscount.setStartDate(dto.getStartDate());
+        existingDiscount.setEndDate(dto.getEndDate());
         return exsistingDiscountRepository.save(existingDiscount);
     }
 

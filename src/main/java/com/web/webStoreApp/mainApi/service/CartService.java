@@ -66,12 +66,16 @@ public class CartService {
             Optional<Cart> cartOpt = cartRepository.findByKey(dto.getUserId(), dto.getProductId());
             if (cartOpt.isPresent()) {
                 Cart cart = cartOpt.get();
+                Product product = productOpt.get();
                 if (cart.getAmount() == dto.getAmount()) {
                     cartRepository.deletePositionByKey(dto.getUserId(), dto.getProductId());
+                    product.setAmount(product.getAmount() - dto.getAmount());
+                    productRepository.save(product);
                     return "Position has been bought";
                 } else if (cart.getAmount() > dto.getAmount()) {
                     cart.setAmount(cart.getAmount() - dto.getAmount());
                     cartRepository.save(cart);
+                    product.setAmount(product.getAmount() - dto.getAmount());
                     return "Part of products in the position have been bought";
                 } else {
                     return "There are no that much products in the position";

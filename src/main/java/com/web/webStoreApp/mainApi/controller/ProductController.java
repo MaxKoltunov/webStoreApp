@@ -63,14 +63,9 @@ public class ProductController {
     // curl -X DELETE "http://localhost:8080/api/main/products/delete" -H "Content-Type: application/json" -d "{\"name\":\"test_product\", \"type\":\"test_type\", \"brand\":\"test_brand\"}"
 
     @Transactional
-    public String mapDiscountToProducts(ExistingDiscountDTO dto) {
-        Optional<ExistingDiscount> discountOpt = exsistingDiscountRepository.findByAll(dto.getName(), dto.getType(), dto.getProductType(), dto.getStartDate(), dto.getEndDate());
-        if (discountOpt.isEmpty()) {
-            return "An error occurred: null pointer for discount";
-        }
-        ExistingDiscount discount = discountOpt.get();
+    public String mapDiscountToProducts(ExistingDiscount discount) {
 
-        List<Product> productList = productRepository.findByType(dto.getProductType());
+        List<Product> productList = productRepository.findByType(discount.getProductType());
         if (productList.isEmpty()) {
             return "No suitable products for this discount were found";
         }
@@ -80,32 +75,32 @@ public class ProductController {
         }
         return "A new discount for product has been added";
     }
-
-    public String checkDiscountsActualityInProducts() {
-        List<Long> productIds = productRepository.getAllIds();
-        if (productIds.isEmpty()) {
-            return "There are no products";
-        }
-        for (Long id : productIds) {
-            Optional<Product> productOpt = productRepository.findById(id);
-            if (productOpt.isEmpty()) {
-                return "Something went wrong: null pointer for product";
-            }
-            Product product = productOpt.get();
-
-            Optional<ExistingDiscount> discountOpt = Optional.ofNullable(product.getDiscount());
-
-            if (discountOpt.isPresent()) {
-                ExistingDiscount discount = discountOpt.get();
-                ZonedDateTime now = ZonedDateTime.now(TIME_ZONE);
-                ZonedDateTime endDateTime = discount.getEndDate().toInstant().atZone(TIME_ZONE);
-                if (now.isAfter(endDateTime)) {
-                    product.setDiscount(null);
-                    productRepository.save(product);
-                    System.out.println("Ended discount has been deleted from product");
-                }
-            }
-        }
-        return "Discount actuality has been checked";
-    }
+//
+//    public String checkDiscountsActualityInProducts() {
+//        List<Long> productIds = productRepository.getAllIds();
+//        if (productIds.isEmpty()) {
+//            return "There are no products";
+//        }
+//        for (Long id : productIds) {
+//            Optional<Product> productOpt = productRepository.findById(id);
+//            if (productOpt.isEmpty()) {
+//                return "Something went wrong: null pointer for product";
+//            }
+//            Product product = productOpt.get();
+//
+//            Optional<ExistingDiscount> discountOpt = Optional.ofNullable(product.getDiscount());
+//
+//            if (discountOpt.isPresent()) {
+//                ExistingDiscount discount = discountOpt.get();
+//                ZonedDateTime now = ZonedDateTime.now(TIME_ZONE);
+//                ZonedDateTime endDateTime = discount.getEndDate().toInstant().atZone(TIME_ZONE);
+//                if (now.isAfter(endDateTime)) {
+//                    product.setDiscount(null);
+//                    productRepository.save(product);
+//                    System.out.println("Ended discount has been deleted from product");
+//                }
+//            }
+//        }
+//        return "Discount actuality has been checked";
+//    }
 }

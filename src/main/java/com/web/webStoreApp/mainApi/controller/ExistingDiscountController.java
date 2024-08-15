@@ -3,7 +3,9 @@ package com.web.webStoreApp.mainApi.controller;
 
 import com.web.webStoreApp.mainApi.dto.ExistingDiscountDTO;
 import com.web.webStoreApp.mainApi.entity.ExistingDiscount;
+import com.web.webStoreApp.mainApi.entity.Product;
 import com.web.webStoreApp.mainApi.repository.ExsistingDiscountRepository;
+import com.web.webStoreApp.mainApi.repository.ProductRepository;
 import com.web.webStoreApp.mainApi.service.ExistingDiscountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -22,7 +24,7 @@ import java.util.Optional;
 public class ExistingDiscountController {
 
     @Autowired
-    private ProductController productController;
+    private ProductRepository productRepository;
 
     @Autowired
     public ExistingDiscountService existingDiscountService;
@@ -34,7 +36,7 @@ public class ExistingDiscountController {
 
     @PostMapping("/add")
     public String addExistingDiscount(@RequestBody ExistingDiscountDTO dto) {
-        existingDiscountService.addExistingDiscount(dto.getName(), dto.getType(), dto.getProductType(), dto.getStartDate(), dto.getEndDate());
+        existingDiscountService.addExistingDiscount(dto);
         return "A new discount has been added";
     }
     // curl -X POST "http://localhost:8080/api/main/discounts/add" -H "Content-Type: application/json" -d "{\"name\": \"test_discount\", \"type\": \"test_type\", \"productType\": \"test_product_type\", \"startDate\": \"2024-08-01T06:00:00+05:00\", \"endDate\": \"2024-08-14T06:00:00+05:00\"}"
@@ -50,27 +52,25 @@ public class ExistingDiscountController {
     @Scheduled(fixedRate = 30000)
     public void checkActuality() {
 
-        productController.checkDiscountsActualityInProducts();
-
-        List<Long> discountsIds = exsistingDiscountRepository.getAllIds();
-        List<Optional<ExistingDiscount>> discountsOpt = new ArrayList<>();
-        for (Long id : discountsIds) {
-            discountsOpt.add(exsistingDiscountRepository.findById(id));
-        }
-        List<ExistingDiscount> discounts = new ArrayList<>();
-        for (Optional<ExistingDiscount> discountOpt : discountsOpt) {
-            if (discountOpt.isPresent()) {
-                discounts.add(discountOpt.get());
-            } else {
-                System.out.println("Program faced null discount");
-            }
-        }
+        List<ExistingDiscount> discounts = exsistingDiscountRepository.findAll();
 
         ZonedDateTime now = ZonedDateTime.now(TIME_ZONE);
 
         for (ExistingDiscount discount : discounts) {
             ZonedDateTime endDateTime = discount.getEndDate().toInstant().atZone(TIME_ZONE);
             if (now.isAfter(endDateTime)) {
+
+                List<Product> products = productRepository.findByType(discount.getProductType());
+
+                if (products.isEmpty()) {
+                    System.out.println("There are no products for this discount");
+                    return;
+                }
+
+                for (Product product : products) {
+                    product.setDiscount(null);
+                }
+
                 existingDiscountService.deleteExistingDiscount(discount.getName(), discount.getType(), discount.getProductType());
                 System.out.println("Ended discount has been deleted");
             }

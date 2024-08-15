@@ -5,6 +5,7 @@ package com.web.webStoreApp.mainApi.kafka.discountsKafka.consumers;
 import com.web.webStoreApp.mainApi.controller.ExistingDiscountController;
 import com.web.webStoreApp.mainApi.controller.ProductController;
 import com.web.webStoreApp.mainApi.dto.ExistingDiscountDTO;
+import com.web.webStoreApp.mainApi.service.ExistingDiscountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,7 @@ import java.sql.Timestamp;
 public class DiscountKafkaConsumer {
 
     @Autowired
-    private ExistingDiscountController existingDiscountController;
+    private ExistingDiscountService existingDiscountService;
 
     @Autowired
     private ProductController productController;
@@ -36,9 +37,8 @@ public class DiscountKafkaConsumer {
         dto.setProductType(messageObject.getProductType());
         dto.setStartDate(messageObject.getStartDate());
         dto.setEndDate(messageObject.getEndDate());
-        existingDiscountController.addExistingDiscount(dto);
         System.out.println("The message was sent to the controller");
-        productController.mapDiscountToProducts(dto);
+        productController.mapDiscountToProducts(existingDiscountService.addExistingDiscount(dto));
     }
 
     public static class MessageObject {
