@@ -31,12 +31,12 @@ public class User implements UserDetails {
     @Column(name = "birth_day", nullable = false)
     private Date birthDay;
 
-    @Column(name = "phone_number", nullable = false, unique = true)
-    private String phone_number;
+    @Column(name = "phoneNumber", nullable = false, unique = true)
+    private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "level_name", nullable = false)
-    private LevelsOfLoyalty level_of_loyalty;
+    private LevelsOfLoyalty levelOfLoyalty;
 
     @Column(name = "existing", nullable = false)
     private boolean existing;
@@ -59,11 +59,11 @@ public class User implements UserDetails {
     /**
      * Username является номером телефона
      *
-     * @return phone_number в роли username
+     * @return phoneNumber в роли username
      */
     @Override
     public String getUsername() {
-        return phone_number;
+        return phoneNumber;
     }
 
     @Override

@@ -33,11 +33,11 @@ public class AuthenticationService {
 
         var user = User.builder()
                 .name(request.getName())
-                .phone_number(request.getPhone_number())
+                .phoneNumber(request.getPhoneNumber())
                 .birthDay(request.getBirthDay())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .existing(true)
-                .level_of_loyalty(LevelsOfLoyalty.bronze)
+                .levelOfLoyalty(LevelsOfLoyalty.bronze)
                 .role(Role.ROLE_USER)
                 .build();
 
@@ -59,13 +59,13 @@ public class AuthenticationService {
     public JwtAuthenticationResponse signIn(SignInRequest request) {
         System.out.println("Service start");
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                request.getPhone_number(),
+                request.getPhoneNumber(),
                 request.getPassword()
         ));
 
         var user = userService
                 .userDetailsService()
-                .loadUserByUsername(request.getPhone_number());
+                .loadUserByUsername(request.getPhoneNumber());
 
         var jwt = jwtService.generateToken(user);
         System.out.println("Service end");

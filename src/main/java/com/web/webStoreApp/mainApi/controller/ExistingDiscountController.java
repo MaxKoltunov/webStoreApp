@@ -66,7 +66,7 @@ public class ExistingDiscountController {
                 }
 
                 for (Product product : products) {
-                    product.setDiscount(null);
+                    product.setExistingDiscount(null);
                 }
 
                 existingDiscountService.deleteExistingDiscount(discount.getName(), discount.getType(), discount.getProductType());

@@ -17,7 +17,7 @@ public class SignUpRequest {
 
     @Schema(description = "Номер телефона", example = "+11234567890")
     @NotBlank(message = "Номер телефона не может быть пустым")
-    private String phone_number;
+    private String phoneNumber;
 
     @Schema(description = "Дата рождения", example = "YYYY-MM-DD")
     @NotNull(message = "Дата рождения не может быть пустым")

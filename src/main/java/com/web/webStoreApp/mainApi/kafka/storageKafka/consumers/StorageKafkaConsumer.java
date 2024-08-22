@@ -27,7 +27,7 @@ public class StorageKafkaConsumer {
         dto.setType(messageObject.getType());
         dto.setBrand(messageObject.getBrand());
         dto.setCost(messageObject.getCost());
-        dto.setArrival_date(messageObject.getArrivalDate());
+        dto.setArrivalDate(messageObject.getArrivalDate());
         dto.setDiscountId(messageObject.getDiscountId());
         dto.setAmount(messageObject.getAmount());
         productController.addProduct(dto);

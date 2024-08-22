@@ -26,16 +26,11 @@ public class ProductService {
 
         if (productOpt.isPresent()) {
             Product product = productOpt.get();
-            product.setArrivalDate(dto.getArrival_date());
+            product.setArrivalDate(dto.getArrivalDate());
             product.setAmount(product.getAmount() + 1);
             productRepository.save(product);
         } else {
-            Product product = new Product();
-            product.setName(dto.getName());
-            product.setType(dto.getType());
-            product.setCost(dto.getCost());
-            product.setBrand(dto.getBrand());
-            product.setArrivalDate(dto.getArrival_date());
+            Product product = new Product(dto.getName(), dto.getType(), dto.getBrand(), dto.getCost(), dto.getArrivalDate());
             if (dto.getAmount() == null) {
                 product.setAmount(1L);
             } else {
@@ -43,7 +38,7 @@ public class ProductService {
             }
             if (dto.getDiscountId() != null) {
                 ExistingDiscount discount = exsistingDiscountRepository.findById(dto.getDiscountId()).orElse(null);
-                product.setDiscount(discount);
+                product.setExistingDiscount(discount);
             }
 
             productRepository.save(product);

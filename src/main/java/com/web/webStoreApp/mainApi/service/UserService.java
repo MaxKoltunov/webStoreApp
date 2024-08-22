@@ -23,8 +23,14 @@ public class UserService {
 
 
     public User create(User user) {
-        if (userRepository.findByPhoneNumber(user.getUsername()).isPresent()) {
-            throw new RuntimeException("Пользователь уже существует");
+        Optional<User> userOpt = userRepository.findByPhoneNumber(user.getPhoneNumber());
+        if (userOpt.isPresent()) {
+            User existingUser = userOpt.get();
+            if (existingUser.isExisting()) {
+                throw new RuntimeException("Пользователь уже существует");
+            } else {
+                userRepository.deleteUser(user.getPhoneNumber());
+            }
         }
 
         return userRepository.save(user);
@@ -33,15 +39,15 @@ public class UserService {
 
     @Transactional
     public void changeExistingInUser(UserDTO dto) {
-        userRepository.changeExistingInUser(dto.getPhone_number());
+        userRepository.changeExistingInUser(dto.getPhoneNumber());
     }
 
     public String changeLevel(UserDTO dto) {
-        Optional<User> userOpt = userRepository.findByPhoneNumber(dto.getPhone_number());
+        Optional<User> userOpt = userRepository.findByPhoneNumber(dto.getPhoneNumber());
 
         if (userOpt.isPresent()) {
             User user = userOpt.get();
-            user.setLevel_of_loyalty(LevelsOfLoyalty.valueOf(dto.getLevel_name()));
+            user.setLevelOfLoyalty(LevelsOfLoyalty.valueOf(dto.getLevelName()));
             userRepository.save(user);
             return "Level of loyalty has been changed";
         } else {

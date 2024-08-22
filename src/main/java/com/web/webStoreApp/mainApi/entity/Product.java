@@ -1,10 +1,16 @@
 package com.web.webStoreApp.mainApi.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 
-
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "products", schema = "mainschema")
 public class Product {
@@ -37,67 +43,21 @@ public class Product {
     private ExistingDiscount existingDiscount;
 
 
-    public Long getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Long amount) {
-        this.amount = amount;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    public Product(String name, String type, String brand, Long cost, Timestamp arrivalDate, Long amount, ExistingDiscount existingDiscount) {
         this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
         this.type = type;
-    }
-
-    public Long getCost() {
-        return cost;
-    }
-
-    public void setCost(Long cost) {
+        this.brand = brand;
         this.cost = cost;
-    }
-
-    public Timestamp getArrivalDate() {
-        return arrivalDate;
-    }
-
-    public void setArrivalDate(Timestamp arrivalDate) {
         this.arrivalDate = arrivalDate;
-    }
-
-    public ExistingDiscount getDiscount() {
-        return existingDiscount;
-    }
-
-    public void setDiscount(ExistingDiscount existingDiscount) {
+        this.amount = amount;
         this.existingDiscount = existingDiscount;
+    }
+
+    public Product(String name, String type, String brand, Long cost, Timestamp arrivalDate) {
+        this.name = name;
+        this.type = type;
+        this.brand = brand;
+        this.cost = cost;
+        this.arrivalDate = arrivalDate;
     }
 }

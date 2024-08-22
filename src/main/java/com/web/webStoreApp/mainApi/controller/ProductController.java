@@ -67,7 +67,7 @@ public class ProductController {
             return "No suitable products for this discount were found";
         }
         for (Product product : productList) {
-            product.setDiscount(discount);
+            product.setExistingDiscount(discount);
             productRepository.save(product);
         }
         return "A new discount for product has been added";

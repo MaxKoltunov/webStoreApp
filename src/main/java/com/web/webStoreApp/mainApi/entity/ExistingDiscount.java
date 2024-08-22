@@ -2,10 +2,16 @@ package com.web.webStoreApp.mainApi.entity;
 
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.Set;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "discounts", schema = "mainschema")
 public class ExistingDiscount {
@@ -33,60 +39,11 @@ public class ExistingDiscount {
     @OneToMany(mappedBy = "existingDiscount")
     private Set<Product> products;
 
-
-    public String getProductType() {
-        return productType;
-    }
-
-    public void setProductType(String productType) {
-        this.productType = productType;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    public ExistingDiscount(String name, String type, String productType, Timestamp startDate, Timestamp endDate) {
         this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
         this.type = type;
-    }
-
-    public Timestamp getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Timestamp startDate) {
+        this.productType = productType;
         this.startDate = startDate;
-    }
-
-    public Timestamp getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Timestamp endDate) {
         this.endDate = endDate;
-    }
-
-    public Set<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(Set<Product> products) {
-        this.products = products;
     }
 }

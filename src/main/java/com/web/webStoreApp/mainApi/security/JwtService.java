@@ -41,9 +41,9 @@ public class JwtService {
         Map<String, Object> claims = new HashMap<>();
         if (userDetails instanceof User customUserDetails) {
             claims.put("id", customUserDetails.getId());
-            claims.put("phone_number", customUserDetails.getPhone_number());
+            claims.put("phoneNumber", customUserDetails.getPhoneNumber());
             claims.put("role", customUserDetails.getRole());
-            claims.put("level_name", customUserDetails.getLevel_of_loyalty());
+            claims.put("level_name", customUserDetails.getLevelOfLoyalty());
             claims.put("name", customUserDetails.getName());
             claims.put("existing", customUserDetails.isExisting());
         }

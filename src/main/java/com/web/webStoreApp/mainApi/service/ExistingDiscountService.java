@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-
 
 @Service
 public class ExistingDiscountService {
@@ -23,12 +21,7 @@ public class ExistingDiscountService {
 
 
     public ExistingDiscount addExistingDiscount(ExistingDiscountDTO dto) {
-        ExistingDiscount existingDiscount = new ExistingDiscount();
-        existingDiscount.setName(dto.getName());
-        existingDiscount.setType(dto.getType());
-        existingDiscount.setProductType(dto.getProductType());
-        existingDiscount.setStartDate(dto.getStartDate());
-        existingDiscount.setEndDate(dto.getEndDate());
+        ExistingDiscount existingDiscount = new ExistingDiscount(dto.getName(), dto.getType(), dto.getProductType(), dto.getStartDate(), dto.getEndDate());
         return exsistingDiscountRepository.save(existingDiscount);
     }
 
