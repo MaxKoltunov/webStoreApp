@@ -16,6 +16,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     @Transactional
     @Query(value = "UPDATE mainschema.users SET existing = false WHERE phone_number = :phone_number", nativeQuery = true)
+    void changeExistingInUser(String phone_number);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM mainschema.users WHERE phone_number = :phone_number", nativeQuery = true)
     void deleteUser(String phone_number);
 
 
@@ -24,4 +29,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT * FROM mainschema.users WHERE id = :id", nativeQuery = true)
     Optional<User> findById(Long id);
+
+    @Query(value = "SELECT password FROM mainschema.users WHERE phone_number = :phone_number", nativeQuery = true)
+    Optional<User> getPassword(String phone_number);
 }

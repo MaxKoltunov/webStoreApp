@@ -27,7 +27,10 @@ CREATE TABLE IF NOT EXISTS mainschema.users (
     phone_number VARCHAR(255) NOT NULL UNIQUE,
     level_name VARCHAR(255) NOT NULL,
 	existing BOOLEAN NOT NULL,
-    FOREIGN KEY (level_name) REFERENCES mainschema.levelsOfLoyalty(level_name)
+	role_name VARCHAR(255) NOT NULL,
+	password VARCHAR(255) NOT NULL,
+    FOREIGN KEY (level_name) REFERENCES mainschema.levelsOfLoyalty(level_name),
+    FOREIGN KEY (role_name) REFERENCES mainschema.roles(role_name)
 );
 
 
@@ -52,3 +55,13 @@ VALUES ('default'),
     ('bronze'),
     ('silver'),
     ('gold');
+
+
+CREATE TABLE IF NOT EXISTS mainschema.roles (
+    id BIGINT PRIMARY KEY DEFAULT nextval('mainschema.roles_id_seq'),
+    role_name VARCHAR(255) NOT NULL UNIQUE
+);
+
+INSERT INTO mainschema.roles (role_name)
+VALUES ('ROLE_USER'),
+    ('ROLE_ADMIN');

@@ -2,12 +2,23 @@ package com.web.webStoreApp.mainApi.entity;
 
 
 import jakarta.persistence.*;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.sql.Date;
+import java.util.Collection;
+import java.util.List;
 
+@Setter
+@Getter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "users", schema = "mainschema")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_id_seq")
@@ -23,59 +34,56 @@ public class User {
     @Column(name = "phone_number", nullable = false, unique = true)
     private String phone_number;
 
-    @ManyToOne
-    @JoinColumn(name = "level_name", referencedColumnName = "level_name",  nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "level_name", nullable = false)
     private LevelsOfLoyalty level_of_loyalty;
 
     @Column(name = "existing", nullable = false)
     private boolean existing;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role;
 
-    public boolean isExisting() {
-        return existing;
+    @Column(name = "password", nullable = false)
+    private String password;
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
-    public void setExisting(boolean existing) {
-        this.existing = existing;
-    }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Date getBirthDay() {
-        return birthDay;
-    }
-
-    public void setBirthDay(Date birthDay) {
-        this.birthDay = birthDay;
-    }
-
-    public String getPhone_number() {
+    /**
+     * Username является номером телефона
+     *
+     * @return phone_number в роли username
+     */
+    @Override
+    public String getUsername() {
         return phone_number;
     }
 
-    public void setPhone_number(String phone_number) {
-        this.phone_number = phone_number;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    public LevelsOfLoyalty getLevel_of_loyalty() {
-        return level_of_loyalty;
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
-    public void setLevel_of_loyalty(LevelsOfLoyalty level_of_loyalty) {
-        this.level_of_loyalty = level_of_loyalty;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
+

@@ -15,7 +15,7 @@ public class CartController {
     private CartService cartService;
 
 
-    @PostMapping("/add")
+    @PostMapping("/common/add")
     public ResponseEntity<String> add(@RequestBody CartDTO dto) {
         String responseMessage = cartService.putProductInTheCart(dto);
         if (responseMessage.equals("Already existing product has been updated!")) {
@@ -26,9 +26,9 @@ public class CartController {
             return ResponseEntity.badRequest().body(responseMessage);
         }
     }
-    // curl -X POST "http://localhost:8080/api/main/cart/add" -H "Content-Type: application/json" -d "{\"userId\": 1, \"productId\": 2}"
+    // curl -X POST "http://localhost:8080/api/main/cart/common/add" -H "Content-Type: application/json" -d "{\"userId\": 1, \"productId\": 2}"
 
-    @PostMapping("/change")
+    @PostMapping("/common/change")
     public ResponseEntity<String> change(@RequestBody CartDTO dto) {
         String responseMessage = cartService.changePosition(dto);
         if (responseMessage.equals("Position has been changed") || responseMessage.equals("Position has been deleted due to decreasing")) {
@@ -37,9 +37,9 @@ public class CartController {
             return ResponseEntity.badRequest().body(responseMessage);
         }
     }
-    // curl -X POST "http://localhost:8080/api/main/cart/change" -H "Content-Type: application/json" -d "{\"userId\": 1, \"productId\": 2, \"amount\": 1}"
+    // curl -X POST "http://localhost:8080/api/main/cart/common/change" -H "Content-Type: application/json" -d "{\"userId\": 1, \"productId\": 2, \"amount\": 1}"
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/common/delete")
     public ResponseEntity<String> deletePosition(@RequestBody CartDTO dto) {
         String responseMessage = cartService.deletePosition(dto);
         if (responseMessage.equals("Position has been deleted")) {
@@ -48,9 +48,9 @@ public class CartController {
             return ResponseEntity.badRequest().body(responseMessage);
         }
     }
-    // curl -X DELETE "http://localhost:8080/api/main/cart/delete" -H "Content-Type: application/json" -d "{\"userId\": 1, \"productId\": 2}"
+    // curl -X DELETE "http://localhost:8080/api/main/cart/common/delete" -H "Content-Type: application/json" -d "{\"userId\": 1, \"productId\": 2}"
 
-    @PostMapping("/buy")
+    @PostMapping("/common/buy")
     public ResponseEntity<String> buyPosition(@RequestBody CartDTO dto) {
         String responseMessage = cartService.buyPosition(dto);
         if (responseMessage.equals("Position has been bought") || responseMessage.equals("Part of products in the position have been bought")) {
@@ -59,6 +59,6 @@ public class CartController {
             return ResponseEntity.badRequest().body(responseMessage);
         }
     }
-    // curl -X POST "http://localhost:8080/api/main/cart/buy" -H "Content-Type: application/json" -d "{\"userId\": 1, \"productId\": 2, \"amount\": 1}"
+    // curl -X POST "http://localhost:8080/api/main/cart/common/buy" -H "Content-Type: application/json" -d "{\"userId\": 1, \"productId\": 2, \"amount\": 1}"
 
 }

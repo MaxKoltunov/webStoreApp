@@ -15,6 +15,26 @@ public class UserDTO {
 
     private boolean existing;
 
+    private String role_name;
+
+    private String password;
+
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRole_name() {
+        return role_name;
+    }
+
+    public void setRole_name(String role_name) {
+        this.role_name = role_name;
+    }
 
     public boolean isExisting() {
         return existing;

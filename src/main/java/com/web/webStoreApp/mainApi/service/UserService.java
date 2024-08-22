@@ -3,9 +3,13 @@ package com.web.webStoreApp.mainApi.service;
 
 import com.web.webStoreApp.mainApi.dto.UserDTO;
 import com.web.webStoreApp.mainApi.entity.LevelsOfLoyalty;
+import com.web.webStoreApp.mainApi.entity.Role;
 import com.web.webStoreApp.mainApi.entity.User;
 import com.web.webStoreApp.mainApi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,43 +21,53 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private LevelsOfLoyaltyService levelsOfLoyaltyService;
 
-    public String addUser(UserDTO dto) {
-        Optional<User> userOpt = userRepository.findByPhoneNumber(dto.getPhone_number());
-        LevelsOfLoyalty level = levelsOfLoyaltyService.findByName(dto.getLevel_name());
-
-        if (userOpt.isPresent()) {
-            return "User with this phone number already exists";
-        } else {
-            User user = new User();
-            user.setName(dto.getName());
-            user.setBirthDay(dto.getBirthDay());
-            user.setPhone_number(dto.getPhone_number());
-            user.setLevel_of_loyalty(level);
-            user.setExisting(true);
-            userRepository.save(user);
-            return "A new user has been added";
+    public User create(User user) {
+        if (userRepository.findByPhoneNumber(user.getUsername()).isPresent()) {
+            throw new RuntimeException("Пользователь уже существует");
         }
+
+        return userRepository.save(user);
     }
 
+
     @Transactional
-    public void deleteUser(UserDTO dto) {
-        userRepository.deleteUser(dto.getPhone_number());
+    public void changeExistingInUser(UserDTO dto) {
+        userRepository.changeExistingInUser(dto.getPhone_number());
     }
 
     public String changeLevel(UserDTO dto) {
         Optional<User> userOpt = userRepository.findByPhoneNumber(dto.getPhone_number());
-        LevelsOfLoyalty level = levelsOfLoyaltyService.findByName(dto.getLevel_name());
 
         if (userOpt.isPresent()) {
             User user = userOpt.get();
-            user.setLevel_of_loyalty(level);
+            user.setLevel_of_loyalty(LevelsOfLoyalty.valueOf(dto.getLevel_name()));
             userRepository.save(user);
             return "Level of loyalty has been changed";
         } else {
             return "There is already a user with this phone number";
         }
+    }
+
+    public User getByUsername(String username) {
+        return userRepository.findByPhoneNumber(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+
+    }
+
+    public User getCurrentUser() {
+        var username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return getByUsername(username);
+    }
+
+    public UserDetailsService userDetailsService() {
+        return this::getByUsername;
+    }
+
+    @Deprecated
+    public void getAdmin() {
+        var user = getCurrentUser();
+        user.setRole(Role.ROLE_ADMIN);
+        userRepository.save(user);
     }
 }

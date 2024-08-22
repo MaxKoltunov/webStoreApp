@@ -1,8 +1,6 @@
 package com.web.webStoreApp.mainApi.kafka.discountsKafka.consumers;
 
 
-
-import com.web.webStoreApp.mainApi.controller.ExistingDiscountController;
 import com.web.webStoreApp.mainApi.controller.ProductController;
 import com.web.webStoreApp.mainApi.dto.ExistingDiscountDTO;
 import com.web.webStoreApp.mainApi.service.ExistingDiscountService;
