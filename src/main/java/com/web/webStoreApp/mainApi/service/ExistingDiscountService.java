@@ -21,7 +21,13 @@ public class ExistingDiscountService {
 
 
     public ExistingDiscount addExistingDiscount(ExistingDiscountDTO dto) {
-        ExistingDiscount existingDiscount = new ExistingDiscount(dto.getName(), dto.getType(), dto.getProductType(), dto.getStartDate(), dto.getEndDate());
+        ExistingDiscount existingDiscount = ExistingDiscount.builder()
+                .name(dto.getName())
+                .type(dto.getType())
+                .productType(dto.getProductType())
+                .startDate(dto.getStartDate())
+                .endDate(dto.getEndDate())
+                .build();
         return exsistingDiscountRepository.save(existingDiscount);
     }
 

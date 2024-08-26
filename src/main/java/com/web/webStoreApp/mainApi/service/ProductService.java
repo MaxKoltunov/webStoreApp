@@ -30,7 +30,13 @@ public class ProductService {
             product.setAmount(product.getAmount() + 1);
             productRepository.save(product);
         } else {
-            Product product = new Product(dto.getName(), dto.getType(), dto.getBrand(), dto.getCost(), dto.getArrivalDate());
+            Product product = Product.builder()
+                    .name(dto.getName())
+                    .type(dto.getType())
+                    .brand(dto.getBrand())
+                    .cost(dto.getCost())
+                    .arrivalDate(dto.getArrivalDate())
+                    .build();
             if (dto.getAmount() == null) {
                 product.setAmount(1L);
             } else {

@@ -1,10 +1,7 @@
 package com.web.webStoreApp.mainApi.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Timestamp;
 
@@ -12,6 +9,8 @@ import java.sql.Timestamp;
 @Setter
 @NoArgsConstructor
 @Entity
+@Builder
+@AllArgsConstructor
 @Table(name = "products", schema = "mainschema")
 public class Product {
 

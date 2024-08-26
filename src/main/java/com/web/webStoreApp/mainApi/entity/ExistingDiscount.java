@@ -2,9 +2,7 @@ package com.web.webStoreApp.mainApi.entity;
 
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.Set;
@@ -13,6 +11,8 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Entity
+@AllArgsConstructor
+@Builder
 @Table(name = "discounts", schema = "mainschema")
 public class ExistingDiscount {
 

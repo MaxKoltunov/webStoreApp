@@ -36,7 +36,11 @@ public class CartService {
                 cartRepository.save(cart);
                 return "Already existing product has been updated!";
             } else {
-                Cart cart = new Cart(dto.getUserId(), dto.getProductId(), 1L);
+                Cart cart = Cart.builder()
+                        .userId(dto.getUserId())
+                        .productId(dto.getProductId())
+                        .amount(1L)
+                        .build();
                 cartRepository.save(cart);
                 return "A new type of product has been added to your cart!";
             }
