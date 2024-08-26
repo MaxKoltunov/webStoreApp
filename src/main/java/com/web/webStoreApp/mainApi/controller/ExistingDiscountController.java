@@ -4,6 +4,7 @@ package com.web.webStoreApp.mainApi.controller;
 import com.web.webStoreApp.mainApi.dto.ExistingDiscountDTO;
 import com.web.webStoreApp.mainApi.entity.ExistingDiscount;
 import com.web.webStoreApp.mainApi.entity.Product;
+import com.web.webStoreApp.mainApi.exceptions.ProductNotFoundException;
 import com.web.webStoreApp.mainApi.repository.ExsistingDiscountRepository;
 import com.web.webStoreApp.mainApi.repository.ProductRepository;
 import com.web.webStoreApp.mainApi.service.ExistingDiscountService;
@@ -33,16 +34,14 @@ public class ExistingDiscountController {
     private static final ZoneId TIME_ZONE = ZoneId.of("UTC+05:00");
 
     @PostMapping("/admin/add")
-    public String addExistingDiscount(@RequestBody ExistingDiscountDTO dto) {
+    public void addExistingDiscount(@RequestBody ExistingDiscountDTO dto) {
         existingDiscountService.addExistingDiscount(dto);
-        return "A new discount has been added";
     }
     // curl -X POST "http://localhost:8080/api/main/discounts/admin/add" -H "Content-Type: application/json" -d "{\"name\": \"test_discount\", \"type\": \"test_type\", \"productType\": \"test_product_type\", \"startDate\": \"2024-08-01T06:00:00+05:00\", \"endDate\": \"2024-08-14T06:00:00+05:00\"}"
 
     @DeleteMapping("/admin/delete")
-    public String deleteExistingDiscount(@RequestBody ExistingDiscountDTO dto) {
+    public void deleteExistingDiscount(@RequestBody ExistingDiscountDTO dto) {
         existingDiscountService.deleteExistingDiscount(dto.getName(), dto.getType(), dto.getProductType());
-        return "Discount has been deleted";
     }
     // curl -X DELETE "http://localhost:8080/api/main/discounts/admin/delete" -H "Content-Type: application/json" -d "{\"name\":\"test_discount\", \"type\":\"test_type\", \"productType\": \"test_product_type\"}"
 
@@ -61,8 +60,7 @@ public class ExistingDiscountController {
                 List<Product> products = productRepository.findByType(discount.getProductType());
 
                 if (products.isEmpty()) {
-                    System.out.println("There are no products for this discount");
-                    return;
+                    throw new ProductNotFoundException("There are no products for this discount");
                 }
 
                 for (Product product : products) {

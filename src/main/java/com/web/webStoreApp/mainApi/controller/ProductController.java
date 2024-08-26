@@ -4,18 +4,17 @@ package com.web.webStoreApp.mainApi.controller;
 import com.web.webStoreApp.mainApi.dto.ProductDTO;
 import com.web.webStoreApp.mainApi.entity.ExistingDiscount;
 import com.web.webStoreApp.mainApi.entity.Product;
-import com.web.webStoreApp.mainApi.repository.ExsistingDiscountRepository;
+import com.web.webStoreApp.mainApi.exceptions.ProductNotFoundException;
 import com.web.webStoreApp.mainApi.repository.ProductRepository;
-import com.web.webStoreApp.mainApi.service.ExistingDiscountService;
 import com.web.webStoreApp.mainApi.service.ProductService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.ZoneId;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/main/products")
 public class ProductController {
@@ -26,50 +25,36 @@ public class ProductController {
     @Autowired
     private ProductRepository productRepository;
 
-    @Autowired
-    private ExsistingDiscountRepository exsistingDiscountRepository;
-
-    @Autowired
-    private ExistingDiscountService existingDiscountService;
-
-    private static final ZoneId TIME_ZONE = ZoneId.of("UTC+05:00");
 
     @PostMapping("/admin/add")
-    public String addProduct(@RequestBody ProductDTO dto) {
+    public void addProduct(@RequestBody ProductDTO dto) {
         productService.addProduct(dto);
-        return "Product has been added or updated";
     }
     // curl -X POST "http://localhost:8080/api/main/products/admin/add" -H "Content-Type: application/json" -d "{\"name\": \"test_product\", \"type\": \"test_type\", \"brand\":\"test_brand\", \"cost\": 100, \"arrival_date\": \"2024-08-01T06:00:00+05:00\", \"discount_id\": null}"
 
     @PostMapping("/admin/change")
-    public ResponseEntity<String> change(@RequestBody ProductDTO dto) {
-        String responseMessage = productService.changeAmount(dto);
-        if (responseMessage.equals("Product has been deleted due to decreasing") || responseMessage.equals("Amount has been changed")) {
-            return ResponseEntity.ok(responseMessage);
-        } else {
-            return ResponseEntity.badRequest().body(responseMessage);
-        }
+    public void change(@RequestBody ProductDTO dto) {
+        productService.changeAmount(dto);
     }
     // curl -X POST "http://localhost:8080/api/main/products/admin/change" -H "Content-Type: application/json" -d "{\"name\": \"bread\", \"type\": \"bakery\", \"brand\":\"smak\", \"amount\": 20}"
 
     @DeleteMapping("/admin/delete")
-    public String deleteProduct(@RequestBody ProductDTO dto) {
+    public void deleteProduct(@RequestBody ProductDTO dto) {
         productService.deleteProduct(dto.getName(), dto.getType(), dto.getBrand());
-        return "Product has been deleted";
     }
     // curl -X DELETE "http://localhost:8080/api/main/products/admin/delete" -H "Content-Type: application/json" -d "{\"name\":\"test_product\", \"type\":\"test_type\", \"brand\":\"test_brand\"}"
 
     @Transactional
-    public String mapDiscountToProducts(ExistingDiscount discount) {
+    public void mapDiscountToProducts(ExistingDiscount discount) {
 
         List<Product> productList = productRepository.findByType(discount.getProductType());
         if (productList.isEmpty()) {
-            return "No suitable products for this discount were found";
+            throw new ProductNotFoundException("No suitable products for this discount were found");
         }
         for (Product product : productList) {
             product.setExistingDiscount(discount);
             productRepository.save(product);
         }
-        return "A new discount for product has been added";
+        log.info("A new discount for product has been added");
     }
 }

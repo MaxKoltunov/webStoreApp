@@ -4,6 +4,8 @@ package com.web.webStoreApp.mainApi.kafka.discountsKafka.consumers;
 import com.web.webStoreApp.mainApi.controller.ProductController;
 import com.web.webStoreApp.mainApi.dto.ExistingDiscountDTO;
 import com.web.webStoreApp.mainApi.service.ExistingDiscountService;
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.sql.Timestamp;
 
 
+@Slf4j
 @Component
 public class DiscountKafkaConsumer {
 
@@ -24,21 +27,27 @@ public class DiscountKafkaConsumer {
 
     @KafkaListener(topics = "discount-topic", groupId = "discounts", containerFactory = "kafkaListenerContainerFactoryForDiscounts")
     public void listen(MessageObject messageObject) {
-        System.out.println("Listener has received a message!");
+        log.info("Listener has received a message!");
         processMessage(messageObject);
     }
 
     private void processMessage(MessageObject messageObject) {
-        ExistingDiscountDTO dto = new ExistingDiscountDTO();
-        dto.setName(messageObject.getName());
-        dto.setType(messageObject.getType());
-        dto.setProductType(messageObject.getProductType());
-        dto.setStartDate(messageObject.getStartDate());
-        dto.setEndDate(messageObject.getEndDate());
-        System.out.println("The message was sent to the controller");
+        ExistingDiscountDTO dto = ExistingDiscountDTO.builder()
+                .name(messageObject.getName())
+                .type(messageObject.getType())
+                .productType(messageObject.getProductType())
+                .startDate(messageObject.getStartDate())
+                .endDate(messageObject.getEndDate())
+                .build();
+        log.info("The message was sent to the controller");
         productController.mapDiscountToProducts(existingDiscountService.addExistingDiscount(dto));
     }
 
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
     public static class MessageObject {
 
         private String name;
@@ -50,46 +59,5 @@ public class DiscountKafkaConsumer {
         private Timestamp startDate;
 
         private Timestamp endDate;
-
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getType() {
-            return type;
-        }
-
-        public void setType(String type) {
-            this.type = type;
-        }
-
-        public String getProductType() {
-            return productType;
-        }
-
-        public void setProductType(String productType) {
-            this.productType = productType;
-        }
-
-        public Timestamp getStartDate() {
-            return startDate;
-        }
-
-        public void setStartDate(Timestamp startDate) {
-            this.startDate = startDate;
-        }
-
-        public Timestamp getEndDate() {
-            return endDate;
-        }
-
-        public void setEndDate(Timestamp endDate) {
-            this.endDate = endDate;
-        }
     }
 }
