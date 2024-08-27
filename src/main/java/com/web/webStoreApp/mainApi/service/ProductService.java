@@ -26,7 +26,6 @@ public class ProductService {
     private ExsistingDiscountRepository exsistingDiscountRepository;
 
     public void addProduct(ProductDTO dto) {
-        log.info("addProduct() - starting");
         Optional<Product> productOpt = productRepository.findByNameTypeBrand(dto.getName(), dto.getType(), dto.getBrand());
 
         if (productOpt.isPresent()) {

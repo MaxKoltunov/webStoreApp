@@ -12,7 +12,7 @@
 	<artifactId>webStoreApp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>webStoreApp</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Main service</description>
 	<url/>
 	<licenses>
 		<license/>
