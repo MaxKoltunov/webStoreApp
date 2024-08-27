@@ -2,20 +2,10 @@ package com.web.webStoreApp.mainApi.controller;
 
 
 import com.web.webStoreApp.mainApi.dto.ExistingDiscountDTO;
-import com.web.webStoreApp.mainApi.entity.ExistingDiscount;
-import com.web.webStoreApp.mainApi.entity.Product;
-import com.web.webStoreApp.mainApi.exceptions.ProductNotFoundException;
 import com.web.webStoreApp.mainApi.repository.ExsistingDiscountRepository;
-import com.web.webStoreApp.mainApi.repository.ProductRepository;
 import com.web.webStoreApp.mainApi.service.ExistingDiscountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.List;
 
 
 @RestController
@@ -23,15 +13,11 @@ import java.util.List;
 public class ExistingDiscountController {
 
     @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
     public ExistingDiscountService existingDiscountService;
 
     @Autowired
     public ExsistingDiscountRepository exsistingDiscountRepository;
 
-    private static final ZoneId TIME_ZONE = ZoneId.of("UTC+05:00");
 
     @PostMapping("/admin/add")
     public void addExistingDiscount(@RequestBody ExistingDiscountDTO dto) {
@@ -45,33 +31,4 @@ public class ExistingDiscountController {
     }
     // curl -X DELETE "http://localhost:8080/api/main/discounts/admin/delete" -H "Content-Type: application/json" -d "{\"name\":\"test_discount\", \"type\":\"test_type\", \"productType\": \"test_product_type\"}"
 
-    @Transactional
-    @Scheduled(fixedRate = 30000)
-    public void checkActuality() {
-
-        List<ExistingDiscount> discounts = exsistingDiscountRepository.findAll();
-
-        ZonedDateTime now = ZonedDateTime.now(TIME_ZONE);
-
-        for (ExistingDiscount discount : discounts) {
-            ZonedDateTime endDateTime = discount.getEndDate().toInstant().atZone(TIME_ZONE);
-            if (now.isAfter(endDateTime)) {
-
-                List<Product> products = productRepository.findByType(discount.getProductType());
-
-                if (products.isEmpty()) {
-                    throw new ProductNotFoundException("There are no products for this discount");
-                }
-
-                for (Product product : products) {
-                    product.setExistingDiscount(null);
-                }
-
-                existingDiscountService.deleteExistingDiscount(discount.getName(), discount.getType(), discount.getProductType());
-                System.out.println("Ended discount has been deleted");
-            }
-        }
-
-        System.out.println("Discount actuality has been checked");
-    }
 }

@@ -8,11 +8,13 @@ import com.web.webStoreApp.mainApi.security.dto.SignInRequest;
 import com.web.webStoreApp.mainApi.security.dto.SignUpRequest;
 import com.web.webStoreApp.mainApi.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -28,8 +30,7 @@ public class AuthenticationService {
      * @return токен
      */
     public JwtAuthenticationResponse signUp(SignUpRequest request) {
-
-        System.out.println("Service start");
+        log.info("signUp() - starting signing up");
 
         var user = User.builder()
                 .name(request.getName())
@@ -44,9 +45,7 @@ public class AuthenticationService {
         userService.create(user);
 
         var jwt = jwtService.generateToken(user);
-
-        System.out.println("Service end");
-
+        log.info("signUp() - signing up completed for user with name: '{}' and phone number: '{}'", user.getName(), user.getPhoneNumber());
         return new JwtAuthenticationResponse(jwt);
     }
 
@@ -57,7 +56,6 @@ public class AuthenticationService {
      * @return токен
      */
     public JwtAuthenticationResponse signIn(SignInRequest request) {
-        System.out.println("Service start");
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.getPhoneNumber(),
                 request.getPassword()
@@ -68,7 +66,6 @@ public class AuthenticationService {
                 .loadUserByUsername(request.getPhoneNumber());
 
         var jwt = jwtService.generateToken(user);
-        System.out.println("Service end");
         return new JwtAuthenticationResponse(jwt);
     }
 }

@@ -5,8 +5,8 @@ import com.web.webStoreApp.mainApi.dto.UserDTO;
 import com.web.webStoreApp.mainApi.entity.LevelsOfLoyalty;
 import com.web.webStoreApp.mainApi.entity.Role;
 import com.web.webStoreApp.mainApi.entity.User;
+import com.web.webStoreApp.mainApi.exceptions.ObjectNotFoundException;
 import com.web.webStoreApp.mainApi.exceptions.UserAlreadyExistsExcpetion;
-import com.web.webStoreApp.mainApi.exceptions.UserNotFoundException;
 import com.web.webStoreApp.mainApi.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +48,7 @@ public class UserService {
             userRepository.changeExistingInUser(dto.getPhoneNumber());
             log.info("User's existing was changed");
         } else {
-            throw new UserNotFoundException("There is no user with this phone number");
+            throw new ObjectNotFoundException("There is no user with this phone number");
         }
     }
 
@@ -61,11 +61,12 @@ public class UserService {
             userRepository.save(user);
             log.info("Level of loyalty has been changed");
         } else {
-            throw new UserNotFoundException("There is no user with this phone number");
+            throw new ObjectNotFoundException("There is no user with this phone number");
         }
     }
 
     public User getByUsername(String username) {
+        log.info("getByUsername() - starting");
         return userRepository.findByPhoneNumber(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
 

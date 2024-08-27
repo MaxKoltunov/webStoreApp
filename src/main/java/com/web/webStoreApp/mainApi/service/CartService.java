@@ -7,7 +7,7 @@ import com.web.webStoreApp.mainApi.entity.Product;
 import com.web.webStoreApp.mainApi.entity.User;
 import com.web.webStoreApp.mainApi.exceptions.CartAmountException;
 import com.web.webStoreApp.mainApi.exceptions.CartCreatingException;
-import com.web.webStoreApp.mainApi.exceptions.CartNotFoundException;
+import com.web.webStoreApp.mainApi.exceptions.ObjectNotFoundException;
 import com.web.webStoreApp.mainApi.repository.CartRepository;
 import com.web.webStoreApp.mainApi.repository.ProductRepository;
 import com.web.webStoreApp.mainApi.repository.UserRepository;
@@ -31,6 +31,7 @@ public class CartService {
     private ProductRepository productRepository;
 
     public void putProductInTheCart(CartDTO dto) {
+        log.info("putProductInTheCart() - starting");
         Optional<User> userOpt = userRepository.findById(dto.getUserId());
         Optional<Product> productOpt = productRepository.findById(dto.getProductId());
         if (userOpt.isPresent() && productOpt.isPresent()) {
@@ -61,11 +62,12 @@ public class CartService {
             cartRepository.deletePositionByKey(dto.getUserId(), dto.getProductId());
             log.info("Position has been deleted");
         } else {
-            throw new CartNotFoundException("There is no position with this id");
+            throw new ObjectNotFoundException("There is no position with this id");
         }
     }
 
     public void buyPosition(CartDTO dto) {
+        log.info("buyPosition() - starting");
         Optional<User> userOpt = userRepository.findById(dto.getUserId());
         Optional<Product> productOpt = productRepository.findById(dto.getProductId());
         if (userOpt.isPresent() && productOpt.isPresent()) {
@@ -87,7 +89,7 @@ public class CartService {
                     throw new CartAmountException("There are no that much products in the position");
                 }
             } else {
-                throw new CartNotFoundException("There is no position with this id");
+                throw new ObjectNotFoundException("There is no position with this id");
             }
         } else {
             throw new CartCreatingException("There is no user or product with this id");
@@ -95,6 +97,7 @@ public class CartService {
     }
 
     public void changePosition(CartDTO dto) {
+        log.info("changePosition() - starting");
         Optional<User> userOpt = userRepository.findById(dto.getUserId());
         Optional<Product> productOpt = productRepository.findById(dto.getProductId());
         if (userOpt.isPresent() && productOpt.isPresent()) {
@@ -109,7 +112,7 @@ public class CartService {
                 cartRepository.save(cart);
                 log.info("Position has been changed");
             } else {
-                throw new CartNotFoundException("There is no position with this id");
+                throw new ObjectNotFoundException("There is no position with this id");
             }
         } else {
             throw new CartCreatingException("There is no user or product with this id");

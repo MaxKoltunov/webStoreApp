@@ -11,20 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class WebExceptionHandler {
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException exception) {
-        log.error(exception.getMessage());
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<String> handleProductNotFoundException(ProductNotFoundException exception) {
-        log.error(exception.getMessage());
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(CartNotFoundException.class)
-    public ResponseEntity<String> handleCartNotFoundException(CartNotFoundException exception) {
+    @ExceptionHandler(ObjectNotFoundException.class)
+    public ResponseEntity<String> handleUserNotFoundException(ObjectNotFoundException exception) {
         log.error(exception.getMessage());
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }

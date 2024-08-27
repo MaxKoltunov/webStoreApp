@@ -4,7 +4,7 @@ package com.web.webStoreApp.mainApi.controller;
 import com.web.webStoreApp.mainApi.dto.ProductDTO;
 import com.web.webStoreApp.mainApi.entity.ExistingDiscount;
 import com.web.webStoreApp.mainApi.entity.Product;
-import com.web.webStoreApp.mainApi.exceptions.ProductNotFoundException;
+import com.web.webStoreApp.mainApi.exceptions.ObjectNotFoundException;
 import com.web.webStoreApp.mainApi.repository.ProductRepository;
 import com.web.webStoreApp.mainApi.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
@@ -44,17 +44,4 @@ public class ProductController {
     }
     // curl -X DELETE "http://localhost:8080/api/main/products/admin/delete" -H "Content-Type: application/json" -d "{\"name\":\"test_product\", \"type\":\"test_type\", \"brand\":\"test_brand\"}"
 
-    @Transactional
-    public void mapDiscountToProducts(ExistingDiscount discount) {
-
-        List<Product> productList = productRepository.findByType(discount.getProductType());
-        if (productList.isEmpty()) {
-            throw new ProductNotFoundException("No suitable products for this discount were found");
-        }
-        for (Product product : productList) {
-            product.setExistingDiscount(discount);
-            productRepository.save(product);
-        }
-        log.info("A new discount for product has been added");
-    }
 }

@@ -1,9 +1,9 @@
 package com.web.webStoreApp.mainApi.kafka.discountsKafka.consumers;
 
 
-import com.web.webStoreApp.mainApi.controller.ProductController;
 import com.web.webStoreApp.mainApi.dto.ExistingDiscountDTO;
 import com.web.webStoreApp.mainApi.service.ExistingDiscountService;
+import com.web.webStoreApp.mainApi.service.ProductService;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class DiscountKafkaConsumer {
     private ExistingDiscountService existingDiscountService;
 
     @Autowired
-    private ProductController productController;
+    private ProductService productService;
 
 
     @KafkaListener(topics = "discount-topic", groupId = "discounts", containerFactory = "kafkaListenerContainerFactoryForDiscounts")
@@ -32,6 +32,7 @@ public class DiscountKafkaConsumer {
     }
 
     private void processMessage(MessageObject messageObject) {
+        log.info("processMessage() - processing message");
         ExistingDiscountDTO dto = ExistingDiscountDTO.builder()
                 .name(messageObject.getName())
                 .type(messageObject.getType())
@@ -40,7 +41,7 @@ public class DiscountKafkaConsumer {
                 .endDate(messageObject.getEndDate())
                 .build();
         log.info("The message was sent to the controller");
-        productController.mapDiscountToProducts(existingDiscountService.addExistingDiscount(dto));
+        productService.mapDiscountToProducts(existingDiscountService.addExistingDiscount(dto));
     }
 
     @Getter

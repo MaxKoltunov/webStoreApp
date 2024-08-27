@@ -4,7 +4,7 @@ package com.web.webStoreApp.mainApi.service;
 import com.web.webStoreApp.mainApi.dto.ProductDTO;
 import com.web.webStoreApp.mainApi.entity.ExistingDiscount;
 import com.web.webStoreApp.mainApi.entity.Product;
-import com.web.webStoreApp.mainApi.exceptions.ProductNotFoundException;
+import com.web.webStoreApp.mainApi.exceptions.ObjectNotFoundException;
 import com.web.webStoreApp.mainApi.repository.ExsistingDiscountRepository;
 import com.web.webStoreApp.mainApi.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -25,6 +26,7 @@ public class ProductService {
     private ExsistingDiscountRepository exsistingDiscountRepository;
 
     public void addProduct(ProductDTO dto) {
+        log.info("addProduct() - starting");
         Optional<Product> productOpt = productRepository.findByNameTypeBrand(dto.getName(), dto.getType(), dto.getBrand());
 
         if (productOpt.isPresent()) {
@@ -55,6 +57,7 @@ public class ProductService {
     }
 
     public void changeAmount(ProductDTO dto) {
+        log.info("changeAmount() - starting");
         Optional<Product> productOpt = productRepository.findByNameTypeBrand(dto.getName(), dto.getType(), dto.getBrand());
 
         if (productOpt.isPresent()) {
@@ -67,7 +70,7 @@ public class ProductService {
             productRepository.save(product);
             log.info("Amount has been changed");
         } else {
-            throw new ProductNotFoundException("There is no such product");
+            throw new ObjectNotFoundException("There is no such product");
         }
     }
 
@@ -75,5 +78,20 @@ public class ProductService {
     public void deleteProduct(String name, String type, String brand) {
         productRepository.deleteProduct(name, type, brand);
         log.info("Product has been deleted");
+    }
+
+    @Transactional
+    public void mapDiscountToProducts(ExistingDiscount discount) {
+        log.info("mapDiscountToProducts() - starting");
+
+        List<Product> productList = productRepository.findByType(discount.getProductType());
+        if (productList.isEmpty()) {
+            throw new ObjectNotFoundException("No suitable products for this discount were found");
+        }
+        for (Product product : productList) {
+            product.setExistingDiscount(discount);
+            productRepository.save(product);
+        }
+        log.info("A new discount for product has been added");
     }
 }
