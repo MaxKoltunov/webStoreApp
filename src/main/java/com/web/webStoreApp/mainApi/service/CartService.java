@@ -84,6 +84,7 @@ public class CartService {
                     cart.setAmount(cart.getAmount() - dto.getAmount());
                     cartRepository.save(cart);
                     product.setAmount(product.getAmount() - dto.getAmount());
+                    productRepository.save(product);
                     log.info("Part of products in the position have been bought");
                 } else {
                     throw new CartAmountException("There are no that much products in the position");

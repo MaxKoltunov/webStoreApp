@@ -24,14 +24,10 @@ public class ExistingDiscountService {
     @Autowired
     private ProductRepository productRepository;
 
-    private final ExsistingDiscountRepository exsistingDiscountRepository;
+    @Autowired
+    private ExsistingDiscountRepository exsistingDiscountRepository;
 
     private static final ZoneId TIME_ZONE = ZoneId.of("UTC+05:00");
-
-    @Autowired
-    public ExistingDiscountService(ExsistingDiscountRepository exsistingDiscountRepository) {
-        this.exsistingDiscountRepository = exsistingDiscountRepository;
-    }
 
 
     public ExistingDiscount addExistingDiscount(ExistingDiscountDTO dto) {
@@ -81,5 +77,4 @@ public class ExistingDiscountService {
 
         log.info("Discount actuality has been checked");
     }
-
 }
