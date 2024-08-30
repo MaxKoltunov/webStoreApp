@@ -41,7 +41,7 @@ public class CartServiceTest {
     }
 
     @Test
-    public void testPutProductInTheCart_ExistingProduct() {
+    public void testPutProductInTheCart_ExistingProduct_shouldSaveProduct() {
         // Given
         CartDTO cartDTO = new CartDTO(1L, 1L, 1L);
 
@@ -62,7 +62,7 @@ public class CartServiceTest {
     }
 
     @Test
-    public void testPutProductInTheCart_NewProduct() {
+    public void testPutProductInTheCart_NewProduct_shouldSaveProduct() {
         // Given
         CartDTO cartDTO = new CartDTO(1L, 1L, 1L);
 
@@ -94,7 +94,7 @@ public class CartServiceTest {
     }
 
     @Test
-    public void testDeletePosition_UserAndProductArePresent() {
+    public void testDeletePosition_UserAndProductArePresent_shouldDeleteProduct() {
         // Given
         CartDTO cartDTO = new CartDTO(1L, 1L, 1L);
 

@@ -2,7 +2,6 @@ package com.web.webStoreApp.mainApi.controller;
 
 
 import com.web.webStoreApp.mainApi.dto.ExistingDiscountDTO;
-import com.web.webStoreApp.mainApi.repository.ExsistingDiscountRepository;
 import com.web.webStoreApp.mainApi.service.ExistingDiscountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +13,6 @@ public class ExistingDiscountController {
 
     @Autowired
     public ExistingDiscountService existingDiscountService;
-
-    @Autowired
-    public ExsistingDiscountRepository exsistingDiscountRepository;
 
 
     @PostMapping("/admin/add")

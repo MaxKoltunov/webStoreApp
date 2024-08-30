@@ -29,5 +29,4 @@ public class UserController {
     }
     // curl -X POST "http://localhost:8080/api/main/users/admin/changelevel" -H "Content-Type: application/json" -d "{\"phoneNumber\": \"+79129215943\", \"level_name\": \"bronze\"}"
 
-
 }

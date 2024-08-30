@@ -2,17 +2,11 @@ package com.web.webStoreApp.mainApi.controller;
 
 
 import com.web.webStoreApp.mainApi.dto.ProductDTO;
-import com.web.webStoreApp.mainApi.entity.ExistingDiscount;
-import com.web.webStoreApp.mainApi.entity.Product;
-import com.web.webStoreApp.mainApi.exceptions.ObjectNotFoundException;
 import com.web.webStoreApp.mainApi.repository.ProductRepository;
 import com.web.webStoreApp.mainApi.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController

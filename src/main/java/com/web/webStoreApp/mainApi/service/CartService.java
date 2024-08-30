@@ -38,7 +38,11 @@ public class CartService {
             Optional<Cart> cartOpt = cartRepository.findByKey(dto.getUserId(), dto.getProductId());
             if (cartOpt.isPresent()) {
                 Cart cart = cartOpt.get();
-                cart.setAmount(dto.getAmount() + 1);
+                if (dto.getAmount() != null) {
+                    cart.setAmount(cart.getAmount() + dto.getAmount());
+                } else {
+                    cart.setAmount(cart.getAmount() + 1);
+                }
                 cartRepository.save(cart);
                 log.info("Already existing product has been updated!");
             } else {

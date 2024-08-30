@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -35,7 +36,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                // Своего рода отключение CORS (разрешение запросов со всех доменов)
+
                 .cors(cors -> cors.configurationSource(request -> {
                     var corsConfiguration = new CorsConfiguration();
                     corsConfiguration.setAllowedOriginPatterns(List.of("*"));
@@ -44,14 +45,20 @@ public class SecurityConfiguration {
                     corsConfiguration.setAllowCredentials(true);
                     return corsConfiguration;
                 }))
-                // Настройка доступа к конечным точкам
+
                 .authorizeHttpRequests(request -> request
-                        // Можно указать конкретный путь, * - 1 уровень вложенности, ** - любое количество уровней вложенности
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/api/**").hasRole("ADMIN")
                         .requestMatchers("/example/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/common/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/main/products/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/main/products/common/**").hasRole("USER")
+                        .requestMatchers("/api/main/users/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/main/users/common/**").hasRole("USER")
+                        .requestMatchers("/api/main/cart/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/main/cart/common/**").hasRole("USER")
+                        .requestMatchers("/api/main/discounts/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/main/discounts/common/**").hasRole("USER")
+                        .requestMatchers("/common/**").hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())
