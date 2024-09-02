@@ -3,7 +3,9 @@ package com.web.webStoreApp.mainApi.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.web.webStoreApp.mainApi.dto.ExistingDiscountDTO;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestMethodOrder(CustomOrderer.class)
 public class ExistingDiscountControllerTest {
 
     @Autowired
@@ -42,6 +45,7 @@ public class ExistingDiscountControllerTest {
     }
 
     @Test
+    @Order(1)
     @WithMockUser(roles = "ADMIN")
     public void addExistingDiscount_ShouldReturnOk() throws Exception {
 
@@ -52,6 +56,7 @@ public class ExistingDiscountControllerTest {
     }
 
     @Test
+    @Order(2)
     @WithMockUser(roles = "USER")
     public void addExistingDiscount_ShouldReturnForbidden() throws Exception {
 
@@ -62,6 +67,7 @@ public class ExistingDiscountControllerTest {
     }
 
     @Test
+    @Order(3)
     @WithMockUser(roles = "ADMIN")
     public void deleteExistingDiscount_ShouldReturnOk() throws Exception {
 
@@ -72,6 +78,7 @@ public class ExistingDiscountControllerTest {
     }
 
     @Test
+    @Order(4)
     @WithMockUser(roles = "USER")
     public void deleteExistingDiscount_ShouldReturnForbidden() throws Exception {
 
