@@ -30,4 +30,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(value = "SELECT * FROM mainschema.products WHERE type = :product_type", nativeQuery = true)
     List<Product>findByType(String product_type);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM mainschema.products", nativeQuery = true)
+    void deleteAll();
 }

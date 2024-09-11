@@ -18,4 +18,8 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
     @Query(value = "DELETE FROM mainschema.cart WHERE user_id = :user_id AND product_id = :product_id", nativeQuery = true)
     void deletePositionByKey(Long user_id, Long product_id);
 
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM mainschema.caer", nativeQuery = true)
+    void deleteAll();
 }

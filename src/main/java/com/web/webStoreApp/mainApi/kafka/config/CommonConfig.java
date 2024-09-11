@@ -6,6 +6,7 @@ import com.web.webStoreApp.mainApi.kafka.storageKafka.deserializers.StorageKafka
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
@@ -20,13 +21,17 @@ import java.util.Map;
 @Configuration
 public class CommonConfig {
 
+    @Value("${spring.kafka.bootstrap-servers}")
+    private String servers;
+
     @Autowired
     KafkaErrorHandler errorHandler;
+
 
     @Bean
     public ConsumerFactory<String, String> consumerFactoryForDiscounts() {
         Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, servers);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "discounts");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, DiscountKafkaDeserializer.class);
@@ -37,14 +42,14 @@ public class CommonConfig {
     public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactoryForDiscounts() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactoryForDiscounts());
-        factory.setCommonErrorHandler(errorHandler);
+//        factory.setCommonErrorHandler(errorHandler);
         return factory;
     }
 
     @Bean
     public ConsumerFactory<String, String> consumerFactoryForStorage() {
         Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, servers);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "storage");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StorageKafkaDeserializer.class);

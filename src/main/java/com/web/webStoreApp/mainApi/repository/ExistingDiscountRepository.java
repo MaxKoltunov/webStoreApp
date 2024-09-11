@@ -13,12 +13,17 @@ import java.util.Optional;
 
 
 @Repository
-public interface ExsistingDiscountRepository extends JpaRepository<ExistingDiscount, Long> {
+public interface ExistingDiscountRepository extends JpaRepository<ExistingDiscount, Long> {
 
     @Modifying
     @Transactional
     @Query(value = "DELETE FROM mainschema.discounts WHERE name = :name AND type = :type AND product_type = :product_type", nativeQuery = true)
     void deleteExistingDiscount(String name, String type, String product_type);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM mainschema.discounts", nativeQuery = true)
+    void deleteAll();
 
     @Query(value = "SELECT id FROM mainschema.discounts", nativeQuery = true)
     List<Long> getAllIds();

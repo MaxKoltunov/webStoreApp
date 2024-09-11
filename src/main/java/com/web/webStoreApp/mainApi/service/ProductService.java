@@ -5,7 +5,7 @@ import com.web.webStoreApp.mainApi.dto.ProductDTO;
 import com.web.webStoreApp.mainApi.entity.ExistingDiscount;
 import com.web.webStoreApp.mainApi.entity.Product;
 import com.web.webStoreApp.mainApi.exceptions.ObjectNotFoundException;
-import com.web.webStoreApp.mainApi.repository.ExsistingDiscountRepository;
+import com.web.webStoreApp.mainApi.repository.ExistingDiscountRepository;
 import com.web.webStoreApp.mainApi.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class ProductService {
     private ProductRepository productRepository;
 
     @Autowired
-    private ExsistingDiscountRepository exsistingDiscountRepository;
+    private ExistingDiscountRepository existingDiscountRepository;
 
     public void addProduct(ProductDTO dto) {
         Optional<Product> productOpt = productRepository.findByNameTypeBrand(dto.getName(), dto.getType(), dto.getBrand());
@@ -47,7 +47,7 @@ public class ProductService {
                 product.setAmount(dto.getAmount());
             }
             if (dto.getDiscountId() != null) {
-                ExistingDiscount discount = exsistingDiscountRepository.findById(dto.getDiscountId()).orElse(null);
+                ExistingDiscount discount = existingDiscountRepository.findById(dto.getDiscountId()).orElse(null);
                 product.setExistingDiscount(discount);
             }
             productRepository.save(product);

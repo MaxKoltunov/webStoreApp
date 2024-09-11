@@ -2,7 +2,6 @@ package com.web.webStoreApp.mainApi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.web.webStoreApp.mainApi.dto.CartDTO;
-import com.web.webStoreApp.mainApi.service.CartService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -26,9 +25,6 @@ public class CartControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
-
-    @Autowired
-    private CartService cartService;
 
     private CartDTO cartDTO;
 

@@ -1,5 +1,6 @@
 package com.web.webStoreApp.mainApi.service;
 
+import com.web.webStoreApp.TestDatabase;
 import com.web.webStoreApp.mainApi.dto.UserDTO;
 import com.web.webStoreApp.mainApi.entity.LevelsOfLoyalty;
 import com.web.webStoreApp.mainApi.entity.Role;
@@ -7,6 +8,7 @@ import com.web.webStoreApp.mainApi.entity.User;
 import com.web.webStoreApp.mainApi.exceptions.ObjectNotFoundException;
 import com.web.webStoreApp.mainApi.exceptions.UserAlreadyExistsExcpetion;
 import com.web.webStoreApp.mainApi.repository.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -23,8 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class UserServiceTest {
-
+public class UserServiceTest extends TestDatabase {
 
     @Mock
     private UserRepository userRepository;
@@ -39,6 +40,11 @@ public class UserServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         SecurityContextHolder.setContext(securityContext);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        userRepository.deleteAll();
     }
 
     @Test

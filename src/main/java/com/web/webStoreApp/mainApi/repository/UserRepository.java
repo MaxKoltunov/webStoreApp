@@ -32,4 +32,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT password FROM mainschema.users WHERE phone_number = :phoneNumber", nativeQuery = true)
     Optional<User> getPassword(String phoneNumber);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM mainschema.user", nativeQuery = true)
+    void deleteAll();
 }

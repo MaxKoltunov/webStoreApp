@@ -1,8 +1,0 @@
-name: Short description of change
-tag: PATCH
-databaseChangeLog:
-  - include:
-      file: changeLogs/mainSchema/mainSchema_changeLog.yml
-
-  - include:
-      file: changeLogs/storageSchema/storageSchema_changeLog.yml

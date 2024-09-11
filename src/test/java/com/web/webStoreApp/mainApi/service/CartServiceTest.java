@@ -1,5 +1,6 @@
 package com.web.webStoreApp.mainApi.service;
 
+import com.web.webStoreApp.TestDatabase;
 import com.web.webStoreApp.mainApi.dto.CartDTO;
 import com.web.webStoreApp.mainApi.entity.Cart;
 import com.web.webStoreApp.mainApi.entity.Product;
@@ -10,6 +11,7 @@ import com.web.webStoreApp.mainApi.exceptions.ObjectNotFoundException;
 import com.web.webStoreApp.mainApi.repository.CartRepository;
 import com.web.webStoreApp.mainApi.repository.ProductRepository;
 import com.web.webStoreApp.mainApi.repository.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -18,10 +20,11 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class CartServiceTest {
+public class CartServiceTest extends TestDatabase {
 
     @Mock
     private CartRepository cartRepository;
@@ -38,6 +41,13 @@ public class CartServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        cartRepository.deleteAll();
+        userRepository.deleteAll();
+        productRepository.deleteAll();
     }
 
     @Test
@@ -259,7 +269,7 @@ public class CartServiceTest {
         cartService.changePosition(cartDTO);
 
         // Then
-        assert cart.getAmount() < 0;
+        assertThat(cart.getAmount() < 0).isTrue();
         verify(cartRepository, times(1)).deletePositionByKey(cartDTO.getUserId(), cartDTO.getProductId());
     }
 

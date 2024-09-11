@@ -4,8 +4,9 @@ import com.web.webStoreApp.mainApi.dto.ExistingDiscountDTO;
 import com.web.webStoreApp.mainApi.entity.ExistingDiscount;
 import com.web.webStoreApp.mainApi.entity.Product;
 import com.web.webStoreApp.mainApi.exceptions.ObjectNotFoundException;
-import com.web.webStoreApp.mainApi.repository.ExsistingDiscountRepository;
+import com.web.webStoreApp.mainApi.repository.ExistingDiscountRepository;
 import com.web.webStoreApp.mainApi.repository.ProductRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -22,13 +23,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class ExistingDiscountServiceTest {
 
     @Mock
     private ProductRepository productRepository;
 
     @Mock
-    private ExsistingDiscountRepository exsistingDiscountRepository;
+    private ExistingDiscountRepository existingDiscountRepository;
 
     @InjectMocks
     private ExistingDiscountService existingDiscountService;
@@ -39,6 +42,12 @@ public class ExistingDiscountServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        existingDiscountRepository.deleteAll();
+        productRepository.deleteAll();
     }
 
     @Test
@@ -59,17 +68,17 @@ public class ExistingDiscountServiceTest {
                 .endDate(dto.getEndDate())
                 .build();
 
-        when(exsistingDiscountRepository.save(any(ExistingDiscount.class)))
+        when(existingDiscountRepository.save(any(ExistingDiscount.class)))
                 .thenReturn(discount);
 
         // When
         ExistingDiscount result = existingDiscountService.addExistingDiscount(dto);
 
         // Then
-        verify(exsistingDiscountRepository, times(1)).save(any(ExistingDiscount.class));
-        assert result.getName().equals(dto.getName());
-        assert result.getType().equals(dto.getType());
-        assert result.getProductType().equals(dto.getProductType());
+        verify(existingDiscountRepository, times(1)).save(any(ExistingDiscount.class));
+        assertThat(result.getName()).isEqualTo(dto.getName());
+        assertThat(result.getType()).isEqualTo(dto.getType());
+        assertThat(result.getProductType()).isEqualTo(dto.getProductType());
     }
 
     @Test
@@ -78,7 +87,7 @@ public class ExistingDiscountServiceTest {
         existingDiscountService.deleteExistingDiscount("TestDiscount", "TestType", "TestProductType");
 
         // Then
-        verify(exsistingDiscountRepository, times(1)).deleteExistingDiscount(any(), any(), any());
+        verify(existingDiscountRepository, times(1)).deleteExistingDiscount(any(), any(), any());
     }
 
     @Test
@@ -90,7 +99,7 @@ public class ExistingDiscountServiceTest {
         discount.setProductType("TestProductType");
         discount.setEndDate(Timestamp.from(ZonedDateTime.now(TIME_ZONE).plusMinutes(3).toInstant()));
 
-        when(exsistingDiscountRepository.findAll())
+        when(existingDiscountRepository.findAll())
                 .thenReturn(List.of(discount));
 
         // When
@@ -98,7 +107,7 @@ public class ExistingDiscountServiceTest {
 
         // Then
         verify(productRepository, times(0)).findByType(any());
-        verify(exsistingDiscountRepository, times(0)).deleteExistingDiscount(any(), any(), any());
+        verify(existingDiscountRepository, times(0)).deleteExistingDiscount(any(), any(), any());
     }
 
     @Test
@@ -110,7 +119,7 @@ public class ExistingDiscountServiceTest {
         discount.setProductType("TestProductType");
         discount.setEndDate(Timestamp.from(ZonedDateTime.now(TIME_ZONE).minusMinutes(3).toInstant()));
 
-        when(exsistingDiscountRepository.findAll())
+        when(existingDiscountRepository.findAll())
                 .thenReturn(List.of(discount));
 
         Product product = new Product();
@@ -122,7 +131,7 @@ public class ExistingDiscountServiceTest {
 
         // Then
         verify(productRepository, times(1)).findByType(discount.getProductType());
-        verify(exsistingDiscountRepository, times(1))
+        verify(existingDiscountRepository, times(1))
                 .deleteExistingDiscount(discount.getName(), discount.getType(), discount.getProductType());
     }
 
@@ -135,7 +144,7 @@ public class ExistingDiscountServiceTest {
         discount.setProductType("TestProductType");
         discount.setEndDate(Timestamp.from(ZonedDateTime.now(TIME_ZONE).minusMinutes(3).toInstant()));
 
-        when(exsistingDiscountRepository.findAll())
+        when(existingDiscountRepository.findAll())
                 .thenReturn(List.of(discount));
 
         when(productRepository.findByType(discount.getProductType()))

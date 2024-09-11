@@ -1,6 +1,5 @@
 package com.web.webStoreApp.mainApi.kafka.discountsKafka.consumers;
 
-
 import com.web.webStoreApp.mainApi.dto.ExistingDiscountDTO;
 import com.web.webStoreApp.mainApi.service.ExistingDiscountService;
 import com.web.webStoreApp.mainApi.service.ProductService;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.sql.Timestamp;
 
 
+
 @Slf4j
 @Component
 public class DiscountKafkaConsumer {
@@ -25,7 +25,7 @@ public class DiscountKafkaConsumer {
     private ProductService productService;
 
 
-    @KafkaListener(topics = "discount-topic", groupId = "discounts", containerFactory = "kafkaListenerContainerFactoryForDiscounts")
+    @KafkaListener(topics = "discount-topic", containerFactory = "kafkaListenerContainerFactoryForDiscounts")
     public void listen(MessageObject messageObject) {
         log.info("Listener has received a message!");
         processMessage(messageObject);

@@ -1,11 +1,16 @@
 package com.web.webStoreApp.mainApi.service;
 
 
+import com.web.webStoreApp.TestDatabase;
 import com.web.webStoreApp.mainApi.dto.ProductDTO;
 import com.web.webStoreApp.mainApi.entity.ExistingDiscount;
 import com.web.webStoreApp.mainApi.entity.Product;
 import com.web.webStoreApp.mainApi.exceptions.ObjectNotFoundException;
 import com.web.webStoreApp.mainApi.repository.ProductRepository;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -20,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class ProductServiceTest {
+public class ProductServiceTest extends TestDatabase{
 
     @Mock
     private ProductRepository productRepository;
@@ -29,8 +34,13 @@ public class ProductServiceTest {
     private ProductService productService;
 
     @BeforeEach
-    void setUp() {
+    void open() {
         MockitoAnnotations.openMocks(this);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        productRepository.deleteAll();
     }
 
 
